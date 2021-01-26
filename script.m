@@ -117,37 +117,49 @@ N=0.05; % Frequence Brunt Vaissala
 % Conditions initiales
 y0 = [pi pi 10*pi];
 
-%Zspan entre min et max
-zspan=[z0 L];
-%Appel ODE45
-[z,y] = ode45(@(z,y)odefun(z,y,lambda,N),zspan,y0);
+%valeurs par defaut avant passage dans la boucle while
+indicateur_1=0;
+indicateur_2=0;
 
-%Creation des grandeurs b,w,g
-b=(((y(:,1).^2))/(pi*y(:,2)))^(1/2);
-w=y(:,2)./(y(:,1));
-g=(y(:,3)./y(:,1));
-
-
-
-% Recherche des annulations
-
-% Flux de flottabilité
-indice_annulation=recherche_indice_annulation(y(:,3));
-if indice_annulation ~= 0
-     fprintf("le flux de flottabilité s annule entre %f et %f \n", z(indice_annulation), z(indice_annulation+1))
-else
-     disp("pas d'annulation de la flottabilité dans l'intervalle, augmentation du domaine de 10 m")
-     indicateur_1=0;
-end     
-
-% Vitesse d'ascension
-indice_annulation=recherche_indice_annulation(w(:));
-if indice_annulation ~= 0
-     fprintf("la vitesse d'ascension s annule entre %f et %f \n", z(indice_annulation), z(indice_annulation+1) )
-else
-     disp("pas d'annulation de la vitesse d'ascension dans l'intervalle, augmentation du domaine de 10 m")
-     indicateur_2=0;
-end     
+%Tant que pour augmenter la taille du domaine si pas d'annulation des 2
+%grandeurs
+while(indicateur_1 ==0  || indicateur_2==0) %si indicateur 1=0 ou indicateur 2=0
+    L=L+10;%augmentation du domaine
+    
+    %Zspan entre min et max
+    zspan=[z0 L];
+    %Appel ODE45
+    [z,y] = ode45(@(z,y)odefun(z,y,lambda,N),zspan,y0);
+    
+    %Creation des grandeurs b,w,g
+    b=(((y(:,1).^2))/(pi*y(:,2)))^(1/2);
+    w=y(:,2)./(y(:,1));
+    g=(y(:,3)./y(:,1));
+    
+    
+    
+    % Recherche des annulations
+    
+    % Flux de flottabilité
+    indice_annulation=recherche_indice_annulation(y(:,3));
+    if indice_annulation ~= 0
+        fprintf("le flux de flottabilité s annule entre %6.2f m et %6.2f m \n", z(indice_annulation), z(indice_annulation+1))
+        indicateur_1=1;
+    else
+        disp("pas d'annulation de la flottabilité dans l'intervalle, augmentation du domaine de 10 m")
+        indicateur_1=0;
+    end
+    
+    % Vitesse d'ascension
+    indice_annulation=recherche_indice_annulation(w(:));
+    if indice_annulation ~= 0
+        fprintf("la vitesse d'ascension s annule entre %6.2f m et %6.2f m \n", z(indice_annulation), z(indice_annulation+1))
+        indicateur_2=1;
+    else
+        disp("pas d'annulation de la vitesse d'ascension dans l'intervalle, augmentation du domaine de 10 m")
+        indicateur_2=0;
+    end
+end
 
 % Figures
 %Q
