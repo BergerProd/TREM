@@ -116,6 +116,7 @@ N=0.05; % Frequence Brunt Vaissala
 
 % Conditions initiales
 y0 = [pi pi 10*pi];
+
 %Zspan entre min et max
 zspan=[z0 L];
 %Appel ODE45
@@ -130,22 +131,21 @@ g=(y(:,3)./y(:,1));
 
 % Recherche des annulations
 
-
 % Flux de flottabilité
 indice_annulation=recherche_indice_annulation(y(:,3));
 if indice_annulation ~= 0
-     disp("le flux de flottabilité s'annule entre",z(i),z(i+1))
+     fprintf("le flux de flottabilité s annule entre %f et %f \n", z(indice_annulation), z(indice_annulation+1))
 else
-     disp("pas d'annulation dans l'intervalle, augmentation du domaine de 10 m")
+     disp("pas d'annulation de la flottabilité dans l'intervalle, augmentation du domaine de 10 m")
      indicateur_1=0;
 end     
 
 % Vitesse d'ascension
 indice_annulation=recherche_indice_annulation(w(:));
 if indice_annulation ~= 0
-     disp("",z(i),z(i+1))
+     fprintf("la vitesse d'ascension s annule entre %f et %f \n", z(indice_annulation), z(indice_annulation+1) )
 else
-     disp("pas d'annulation dans l'intervalle, augmentation du domaine de 10 m")
+     disp("pas d'annulation de la vitesse d'ascension dans l'intervalle, augmentation du domaine de 10 m")
      indicateur_2=0;
 end     
 
@@ -253,6 +253,7 @@ for i=1:length(vecteur)-1
     prod=vecteur(i)*vecteur(i+1);
     if prod < 0
         indice_annulation=i;
+        break
     else
         indice_annulation=0;
     end
