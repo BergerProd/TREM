@@ -240,43 +240,48 @@ disp("Hauteur Terminal : Panache force avec stratification")
 %y(3)=F
 
 % Conditions initiales
-y0 = [[pi pi 10*pi],[pi pi 0],[pi 0 0]];
-N=[0.05, 1, 0]; % Frequence Brunt Vaissala
+y0=zeros(3,3);
+y0(:,1) = [pi pi 10*pi];
+y0(:,2)=[0.049087 0.01227 0.049087];%w=0,25 b=0,25 g=1
+y0(:,3)=[0.3927 0.1963 3.927];%w=0,5,b=0,5,g=10
+N=[0.05, 0.25, 0.03]; % Frequence Brunt Vaissala
 
 for i=1:3
     
 %valeurs par defaut avant passage dans la boucle while
 indicateur_1=0;
-indicateur_2=0;
 
-    while(indicateur_1 ==0  || indicateur_2==0) %si indicateur 1=0 ou indicateur 2=0
-        L=L+10;%augmentation du domaine        
-                
+    while(indicateur_1 ==0) %si indicateur 1=0 ou indicateur 2=0
+        L=L+10;%augmentation du domaine
+
         %Zspan entre min et max
         zspan=[z0 L];
         %Appel ODE45
-        [z,y] = ode45(@(z,y)odefun(z,y,lambda,N(i)),zspan,y0(i));
+        [z,y] = ode45(@(z,y)odefun(z,y,lambda,N(i)),zspan,y0(:,i));
         
         %Creation des grandeurs b,w,g
         b=(((y(:,1).^2))/(pi*y(:,2)))^(1/2);
         w=y(:,2)./(y(:,1));
         g=(y(:,3)./y(:,1));
-        
-        
-        
+                       
         % Recherche des annulations
         
         % Flux de flottabilité
         indice_annulation=recherche_indice_annulation(y(:,3));
         if indice_annulation ~= 0
+            abcisse_annulation=interp1(real(y(:,3)),z,0,'linear');%fonction interpolation lineaire plus facile
+            fprintf("le flux de flottabilité s annule entre %6.2f m et %6.2f m \n", z(indice_annulation), z(indice_annulation+1))
+            fprintf("avec une interpolation lineaire, s'annule précisement en %6.2f m \n",abcisse_annulation)
             indicateur_1=1;
         else
-            disp("pas d'annulation de la flottabilité dans l'intervalle, augmentation du domaine de 10 m")
+            fprintf("pas d'annulation de la flottabilité dans l'intervalle, augmentation du domaine de 10 m, L= %i, i=%i \n",L,i)
             indicateur_1=0;
         end
     end
-    ht(i)=z(indice_annulation)
+    ht(i)=abcisse_annulation;
 end
+
+
     
 
 else
