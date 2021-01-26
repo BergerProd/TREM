@@ -281,6 +281,17 @@ indicateur_1=0;
     ht(i)=abcisse_annulation;
 end
 
+% Résolution du systeme
+
+% syms A n1 n2
+% eqn1=A==ht(1)/(N(1)^n1*y0(3,1)^n2);
+% eqn2=n1==(log(ht(2)/(A*y0(3,2)^n2))/(log(N(2))));
+% eqn3=n2==(log(ht(3)/(A*N(3)^n1))/(log(y0(3,3))));
+% 
+% S = solve(A,n1,n2);
+% A= double(S.A) 
+% n1 = double(S.n1)
+% n2=double(S.n2)
 
     
 
