@@ -7,7 +7,7 @@
 %-------------------------------
 % Numerique
 sauv_graphe = true; % parametre 
-cas=2;
+cas=3;
 %cas 1 = Jet sans stratification
 %cas 2 = Panache force avec stratification
 %cas 3 = Hauteur terminale
@@ -143,9 +143,9 @@ while(indicateur_1 ==0  || indicateur_2==0) %si indicateur 1=0 ou indicateur 2=0
     
     
     % Flux de flottabilité
-    abcisse_annulation=interp1(real(y(:,3)),z,0,'linear');%fonction interpolation lineaire plus facile
     indice_annulation=recherche_indice_annulation(y(:,3));
     if indice_annulation ~= 0
+        abcisse_annulation=interp1(real(y(:,3)),z,0,'linear');%fonction interpolation lineaire plus facile
         fprintf("le flux de flottabilité s annule entre %6.2f m et %6.2f m \n", z(indice_annulation), z(indice_annulation+1))
         fprintf("avec une interpolation lineaire, s'annule précisement en %6.2f m \n",abcisse_annulation)
         indicateur_1=1;
@@ -155,9 +155,9 @@ while(indicateur_1 ==0  || indicateur_2==0) %si indicateur 1=0 ou indicateur 2=0
     end
     
     % Vitesse d'ascension
-    abcisse_annulation=interp1(real(w(:)),z,0,'linear');%fonction interpolation lineaire plus facile
     indice_annulation=recherche_indice_annulation(w(:));
     if indice_annulation ~= 0
+        abcisse_annulation=interp1(real(w(:)),z,0,'linear');%fonction interpolation lineaire plus facile
         fprintf("la vitesse d'ascension s annule entre %6.2f m et %6.2f m \n", z(indice_annulation), z(indice_annulation+1))
         fprintf("avec une interpolation lineaire, s'annule précisement en %6.2f m \n",abcisse_annulation)
         indicateur_2=1;
@@ -269,7 +269,6 @@ indicateur_2=0;
         % Flux de flottabilité
         indice_annulation=recherche_indice_annulation(y(:,3));
         if indice_annulation ~= 0
-            fprintf("le flux de flottabilité s annule entre %6.2f m et %6.2f m \n", z(indice_annulation), z(indice_annulation+1))
             indicateur_1=1;
         else
             disp("pas d'annulation de la flottabilité dans l'intervalle, augmentation du domaine de 10 m")
