@@ -246,7 +246,12 @@ y0(:,2)=[0.049087 0.01227 0.049087];%w=0,25 b=0,25 g=1
 y0(:,3)=[0.3927 0.1963 3.927];%w=0,5,b=0,5,g=10
 N=[0.05, 0.25, 0.03]; % Frequence Brunt Vaissala
 
-for i=1:3
+% Attention très sensible aux conditions initiales, il monte avec des
+% domaines assez haut lorsque les conditions initales n'arrivent pas à
+% résoudre l'equa diff
+
+%Execution avec toutes les conditions initiales
+for i=1:length(N)
     
 %valeurs par defaut avant passage dans la boucle while
 indicateur_1=0;
@@ -278,20 +283,32 @@ indicateur_1=0;
             indicateur_1=0;
         end
     end
-    ht(i)=abcisse_annulation;
+    ht(i)=abcisse_annulation; %stockage 
 end
 
 % Résolution du systeme
 
-% syms A n1 n2
-% eqn1=A==ht(1)/(N(1)^n1*y0(3,1)^n2);
-% eqn2=n1==(log(ht(2)/(A*y0(3,2)^n2))/(log(N(2))));
-% eqn3=n2==(log(ht(3)/(A*N(3)^n1))/(log(y0(3,3))));
-% 
-% S = solve(A,n1,n2);
-% A= double(S.A) 
-% n1 = double(S.n1)
-% n2=double(S.n2)
+%passage des variables en globales pour les passer dans la fonction pour la
+%résolution
+global y0_glob N_glob ht_glob
+
+y0_glob=y0;
+N_glob=N;
+ht_glob=ht;
+
+
+fun = @root2d;
+x0 = [0,0,0];
+x = fsolve(fun,x0);
+
+x(1) * y0(1,3)^x(2) * N(1)^x(3) -ht(1);
+x(1) * y0(2,3)^x(2) * N(2)^x(3) -ht(2);
+x(1) * y0(3,3)^x(2) * N(3)^x(3) -ht(3);
+
+%Sortie des paramètres du système
+A=x(1)
+n1=x(2)
+n2=x(3)
 
     
 
@@ -343,6 +360,17 @@ for i=1:length(vecteur)-1
         indice_annulation=0;
     end
 end
+end
+
+%Fonction pour la résolution du système
+function F = root2d(x)
+
+global y0_glob N_glob ht_glob
+
+F(1) = x(1) * y0_glob(1,3)^x(2) * N_glob(1)^x(3) -ht_glob(1);
+F(2) = x(1) * y0_glob(2,3)^x(2) * N_glob(2)^x(3) -ht_glob(2);
+F(3) = x(1) * y0_glob(3,3)^x(2) * N_glob(3)^x(3) -ht_glob(3);
+
 end
 
 
