@@ -7,7 +7,7 @@
 %-------------------------------
 % Numerique
 sauv_graphe = true; % parametre 
-cas=3;
+cas=2;
 %cas 1 = Jet sans stratification
 %cas 2 = Panache force avec stratification
 %cas 3 = Hauteur terminale
@@ -148,6 +148,9 @@ while(indicateur_1 ==0  || indicateur_2==0) %si indicateur 1=0 ou indicateur 2=0
         abcisse_annulation=interp1(real(y(:,3)),z,0,'linear');%fonction interpolation lineaire plus facile
         fprintf("le flux de flottabilité s annule entre %6.2f m et %6.2f m \n", z(indice_annulation), z(indice_annulation+1))
         fprintf("avec une interpolation lineaire, s'annule précisement en %6.2f m \n",abcisse_annulation)
+        %comparaison avec la valeur théorique
+        abcisse_annulation_theorique=3.8*(y0(3)/N^3)^(1/4);
+        fprintf("On compare avec la valeur théorique s'annule précisement en %6.2f m \n",abcisse_annulation_theorique)
         indicateur_1=1;
     else
         disp("pas d'annulation de la flottabilité dans l'intervalle, augmentation du domaine de 10 m")
@@ -166,6 +169,8 @@ while(indicateur_1 ==0  || indicateur_2==0) %si indicateur 1=0 ou indicateur 2=0
         indicateur_2=0;
     end
 end
+
+
 
 % Figures
 %Q
