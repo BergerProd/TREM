@@ -5,9 +5,10 @@
 %-------------------------------
 % Donnees Entree
 %-------------------------------
+clear all
 % Numerique
 sauv_graphe = true; % parametre 
-cas=2;
+cas=1;
 %cas 1 = Jet sans stratification
 %cas 2 = Panache force avec stratification
 %cas 3 = Hauteur terminale
@@ -43,14 +44,26 @@ b=(((y(:,1).^2))/(pi*y(:,2)))^(1/2);
 w=y(:,2)./(y(:,1));
 g=(y(:,3)./y(:,1));
 
+%Comparaison avec theorie
+a0=0.107;
+a1=7;
+a2=1;
+a3=0.25;
+b_th=a0*z;
+w_th=a1*sqrt(y0(2))*z.^-1;
+M_th=a2*y0(2)*ones(length(z),1);
+Q_th=a3*sqrt(y0(2))*z;
+
 % Figures
 %Q
 figure(1)
 hold on
 plot(z,y(:,1))
+plot(z,Q_th)
 xlabel('z')
 ylabel('Q')
 %title('')
+legend('numérique','theorique')
 grid on
 hold off
 
@@ -58,8 +71,10 @@ hold off
 figure(2)
 hold on
 plot(z,y(:,2))
+plot(z,M_th)
 xlabel('z')
 ylabel('M')
+legend('numérique','theorique')
 %title('Solutions transitoire de u et v dans le plan u,v')
 grid on
 hold off
@@ -78,8 +93,10 @@ hold off
 figure(4)
 hold on
 plot(z,b)
+plot(z,b_th)
 xlabel('z')
 ylabel('b')
+legend('numérique','theorique')
 %title('Solutions transitoire de u et v dans le plan u,v')
 grid on
 hold off
@@ -89,8 +106,11 @@ hold off
 figure(5)
 hold on
 plot(z,w)
+plot(z,w_th)
 xlabel('z')
 ylabel('w')
+legend('numérique','theorique')
+
 %title('Solutions transitoire de u et v dans le plan u,v')
 grid on
 hold off
