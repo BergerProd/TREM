@@ -40,7 +40,7 @@ zspan=[z0 L];
 [z,y] = ode45(@(z,y)odefun(z,y,lambda,N),zspan,y0);
 
 %Creation des grandeurs b,w,g
-b=(((y(:,1).^2))/(pi*y(:,2)))^(1/2);
+b=(((y(:,1).^2))./(pi*y(:,2))).^(1/2);
 w=y(:,2)./(y(:,1));
 g=(y(:,3)./y(:,1));
 
@@ -58,11 +58,10 @@ Q_th=a3*sqrt(y0(2))*z;
 %Q
 figure(1)
 hold on
-plot(z,y(:,1))
-plot(z,Q_th)
+plot(z,y(:,1),'b')
+plot(z,Q_th,'r')
 xlabel('z')
 ylabel('Q')
-%title('')
 legend('numérique','theorique')
 grid on
 hold off
@@ -70,34 +69,31 @@ hold off
 %M
 figure(2)
 hold on
-plot(z,y(:,2))
-plot(z,M_th)
+plot(z,y(:,2),'b')
+plot(z,M_th,'r')
 xlabel('z')
 ylabel('M')
 legend('numérique','theorique')
-%title('Solutions transitoire de u et v dans le plan u,v')
 grid on
 hold off
 
 %F
 figure(3)
 hold on
-plot(z,y(:,3))
+plot(z,y(:,3),'b')
 xlabel('z')
 ylabel('F')
-%title('Solutions transitoire de u et v dans le plan u,v')
 grid on
 hold off
 
 %b
 figure(4)
 hold on
-plot(z,b)
-plot(z,b_th)
+plot(z,real(b),'b')
+plot(z,b_th,'r')
 xlabel('z')
 ylabel('b')
 legend('numérique','theorique')
-%title('Solutions transitoire de u et v dans le plan u,v')
 grid on
 hold off
 
@@ -105,13 +101,12 @@ hold off
 %w
 figure(5)
 hold on
-plot(z,w)
-plot(z,w_th)
+plot(z,w,'b')
+plot(z,w_th,'r')
 xlabel('z')
 ylabel('w')
+ylim([0 10])
 legend('numérique','theorique')
-
-%title('Solutions transitoire de u et v dans le plan u,v')
 grid on
 hold off
 
@@ -122,7 +117,6 @@ hold on
 plot(z,g)
 xlabel('z')
 ylabel('g')
-%title('Solutions transitoire de u et v dans le plan u,v')
 grid on
 hold off
 
@@ -146,7 +140,7 @@ indicateur_2=0;
 %Tant que pour augmenter la taille du domaine si pas d'annulation des 2
 %grandeurs
 while(indicateur_1 ==0  || indicateur_2==0) %si indicateur 1=0 ou indicateur 2=0
-    L=L+10;%augmentation du domaine
+    L=L+10;%augmentation du domaine %todo il faudrait faire une alerte pour quand cela descend
     
     %Zspan entre min et max
     zspan=[z0 L];
@@ -154,7 +148,7 @@ while(indicateur_1 ==0  || indicateur_2==0) %si indicateur 1=0 ou indicateur 2=0
     [z,y] = ode45(@(z,y)odefun(z,y,lambda,N),zspan,y0);
     
     %Creation des grandeurs b,w,g
-    b=(((y(:,1).^2))/(pi*y(:,2)))^(1/2);
+    b=(((y(:,1).^2))/(pi*y(:,2))).^(1/2);
     w=y(:,2)./(y(:,1));
     g=(y(:,3)./y(:,1));
     
@@ -210,7 +204,6 @@ hold on
 plot(z,y(:,2))
 xlabel('z')
 ylabel('M')
-%title('Solutions transitoire de u et v dans le plan u,v')
 grid on
 hold off
 
@@ -220,7 +213,6 @@ hold on
 plot(z,y(:,3))
 xlabel('z')
 ylabel('F')
-%title('Solutions transitoire de u et v dans le plan u,v')
 grid on
 hold off
 
@@ -230,7 +222,6 @@ hold on
 plot(z,b)
 xlabel('z')
 ylabel('b')
-%title('Solutions transitoire de u et v dans le plan u,v')
 grid on
 hold off
 
@@ -241,7 +232,6 @@ hold on
 plot(z,w)
 xlabel('z')
 ylabel('w')
-%title('Solutions transitoire de u et v dans le plan u,v')
 grid on
 hold off
 
@@ -252,7 +242,6 @@ hold on
 plot(z,g)
 xlabel('z')
 ylabel('g')
-%title('Solutions transitoire de u et v dans le plan u,v')
 grid on
 hold off
 
@@ -291,7 +280,7 @@ indicateur_1=0;
         [z,y] = ode45(@(z,y)odefun(z,y,lambda,N(i)),zspan,y0(:,i));
         
         %Creation des grandeurs b,w,g
-        b=(((y(:,1).^2))/(pi*y(:,2)))^(1/2);
+        b=(((y(:,1).^2))/(pi*y(:,2))).^(1/2);
         w=y(:,2)./(y(:,1));
         g=(y(:,3)./y(:,1));
                        
