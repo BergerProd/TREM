@@ -18,6 +18,7 @@ L=250; %longueur domaine : m
 lambda =0.125;
 
 %% Cas
+fprintf("cas %i \n",cas)
 if cas==1
 %% Jet sans stratification
 disp("Jet sans stratification")
@@ -347,11 +348,14 @@ end
 %% Fonctions
 
 %Systeme derive pour ODE45
+%y(1)=Q
+%y(2)=M
+%y(3)=F
 function dydz=odefun(z,y,lambda,N)
 dydz=zeros(3,1);
-dydz(1)=2*((y(1)^2)/(pi*y(2)))^(1/2)*lambda*(y(2)/y(1));
-dydz(2)=(y(3)/y(1))*(y(1)^2/(pi*y(2)));
-dydz(3)=-N^2*y(1)/(pi);
+dydz(1)=2*sqrt(pi)*sqrt(y(2))*lambda;
+dydz(2)=(y(3)*y(1))/y(2);
+dydz(3)=-N^2*y(1);
 end
 
 % renvoit l'indice ou cela passe par 0
